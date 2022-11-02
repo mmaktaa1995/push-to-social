@@ -4,5 +4,4 @@ namespace Social\PushToSocial;
 
 class SocialMediaAbstract
 {
-
 }
