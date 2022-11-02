@@ -11,25 +11,34 @@ use Illuminate\Queue\SerializesModels;
 abstract class SocialMediaPosterJob implements ShouldQueue
 {
     use Dispatchable;
+
     use InteractsWithQueue;
+
     use Queueable;
+
     use SerializesModels;
 
     public $tries = 2;
+
     public $timeout = 10;
+
     public $socialMediaSettings;
 
     public function __construct(public $settings = [], public $content = [], public $image = null, public $link = null)
     {
         $this->socialMediaSettings = $settings;
 
-        if ($this->link != null) {
+        if ($this->link != null)
+        {
             $this->content[] = $this->link;
         }
 
-        if ($this->image == "NO") {
+        if ($this->image == 'NO')
+        {
             $this->image = null;
-        } elseif ($this->image == "DEFAULT") {
+        }
+        elseif ($this->image == 'DEFAULT')
+        {
             $this->image = config('social-media-poster.default_image');
         }
 

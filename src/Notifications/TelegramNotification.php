@@ -14,8 +14,8 @@ class TelegramNotification extends Notification implements ShouldQueue
     use Queueable;
 
     public $tries = 2;
-    public $timeout = 10;
 
+    public $timeout = 10;
 
     /**
      * Create a new notification instance.
@@ -23,14 +23,17 @@ class TelegramNotification extends Notification implements ShouldQueue
      * @return void
      */
     public $content;
+
     public $file;
+
     public $notification;
+
     public $to;
 
     public function __construct(
         $content = [],
         $file = null,
-        $to = "nafezly",
+        $to = 'nafezly',
         $notification = true
     ) {
         $this->content = $content;
@@ -53,21 +56,28 @@ class TelegramNotification extends Notification implements ShouldQueue
 
     public function toTelegram($notifiable)
     {
-        $content = "";
-        foreach ($this->content as $con) {
-            if (is_link($con)) {
+        $content = '';
+        foreach ($this->content as $con)
+        {
+            if (is_link($con))
+            {
                 $content = $content . '\n[افتح الرابط](' . $con . ')' . ' ';
-            } else {
+            }
+            else
+            {
                 $content = $content . $con . ' ';
             }
         }
 
-        if ($this->file != null) {
+        if ($this->file != null)
+        {
             return TelegramFile::create()->to('@' . $this->to)
-                ->content($content)->file($this->file, 'photo')->disableNotification(! $this->notification);
-        } else {
+                ->content($content)->file($this->file, 'photo')->disableNotification(!$this->notification);
+        }
+        else
+        {
             return TelegramMessage::create()->to('@' . $this->to)
-                ->content($content)->disableNotification(! $this->notification);
+                ->content($content)->disableNotification(!$this->notification);
         }
     }
 }

@@ -12,5 +12,5 @@ return [
         'google',
     ],
 
-    'default_image' => 'https://nafezly.com/site_images/title.png?v=1'
+    'default_image' => 'https://nafezly.com/site_images/title.png?v=1',
 ];

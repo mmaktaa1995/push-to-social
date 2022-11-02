@@ -2,23 +2,31 @@
 
 namespace SocialMedia\Poster;
 
-use SocialMedia\Poster\Jobs\{FacebookPosterJob, LinkedInPoster, TelegramPosterJob, TwitterPosterJob};
+use SocialMedia\Poster\Exceptions\MissingSocialMediaSettingsException;
+use SocialMedia\Poster\Jobs\FacebookPosterJob;
+use SocialMedia\Poster\Jobs\LinkedInPoster;
+use SocialMedia\Poster\Jobs\TelegramPosterJob;
+use SocialMedia\Poster\Jobs\TwitterPosterJob;
 use SocialMedia\Poster\Models\SocialMediaSetting;
 
 class SocialMedia extends SocialMediaAbstract
 {
     public function publish()
     {
-        if (in_array("facebook", $this->platforms)) {
+        if (in_array('facebook', $this->platforms))
+        {
             $this->toFacebook();
         }
-        if (in_array("twitter", $this->platforms)) {
+        if (in_array('twitter', $this->platforms))
+        {
             $this->toTwitter();
         }
-        if (in_array("linkedin", $this->platforms)) {
+        if (in_array('linkedin', $this->platforms))
+        {
             $this->toLinkedin();
         }
-        if (in_array("telegram", $this->platforms)) {
+        if (in_array('telegram', $this->platforms))
+        {
             $this->toTelegram();
         }
     }
@@ -26,7 +34,7 @@ class SocialMedia extends SocialMediaAbstract
     public function toFacebook()
     {
         $settings = $this->socialMediaSettings->facebook;
-        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Facebook} provider is missing!"));
+        throw_if(!count($settings), new MissingSocialMediaSettingsException('Settings for {Facebook} provider is missing!'));
         FacebookPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
 
         return $this;
@@ -35,7 +43,7 @@ class SocialMedia extends SocialMediaAbstract
     public function toTwitter()
     {
         $settings = $this->socialMediaSettings->twitter;
-        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Twitter} provider is missing!"));
+        throw_if(!count($settings), new MissingSocialMediaSettingsException('Settings for {Twitter} provider is missing!'));
 
         TwitterPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
 
@@ -45,7 +53,7 @@ class SocialMedia extends SocialMediaAbstract
     public function toLinkedin()
     {
         $settings = $this->socialMediaSettings->linkedin;
-        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Linkedin} provider is missing!"));
+        throw_if(!count($settings), new MissingSocialMediaSettingsException('Settings for {Linkedin} provider is missing!'));
         LinkedInPoster::dispatch($settings, $this->content, $this->image, $this->link);
 
         return $this;
@@ -54,7 +62,7 @@ class SocialMedia extends SocialMediaAbstract
     public function toTelegram()
     {
         $settings = $this->socialMediaSettings->telegram;
-        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Telegram} provider is missing!"));
+        throw_if(!count($settings), new MissingSocialMediaSettingsException('Settings for {Telegram} provider is missing!'));
         TelegramPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
 
         return $this;

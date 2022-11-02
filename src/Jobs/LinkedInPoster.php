@@ -10,15 +10,23 @@ use Illuminate\Queue\SerializesModels;
 class LinkedInPoster extends SocialMediaPosterJob
 {
     use Dispatchable;
+
     use InteractsWithQueue;
+
     use Queueable;
+
     use SerializesModels;
 
     public $tries = 2;
+
     public $timeout = 10;
+
     public $content;
+
     public $image;
+
     public $link;
+
     public $socialMediaSettings;
 
     public function __construct($content = [], $image = null, $link = null)
@@ -28,13 +36,17 @@ class LinkedInPoster extends SocialMediaPosterJob
         $this->link = $link;
         $this->socialMediaSettings = \App\SocialMediaSetting::first();
 
-        if ($this->link != null) {
+        if ($this->link != null)
+        {
             array_push($this->content, $this->link);
         }
-        if ($this->image == "NO") {
+        if ($this->image == 'NO')
+        {
             $this->image = null;
-        } elseif ($this->image == "DEFAULT") {
-            $this->image = "https://nafezly.com/site_images/title.png?v=1";
+        }
+        elseif ($this->image == 'DEFAULT')
+        {
+            $this->image = 'https://nafezly.com/site_images/title.png?v=1';
         }
         $this->content = implode("\n", $this->content);
     }
@@ -46,10 +58,9 @@ class LinkedInPoster extends SocialMediaPosterJob
         $ACCESS_TOKEN = json_decode($this->socialMediaSettings->linkedin, true)['ACCESS_TOKEN'];
         $PAGE_ID = json_decode($this->socialMediaSettings->linkedin, true)['PAGE_ID'];
 
-
         $data = [
-            'author' => 'urn:li:organization:' . $PAGE_ID,
-            'lifecycleState' => 'PUBLISHED',
+            'author'          => 'urn:li:organization:' . $PAGE_ID,
+            'lifecycleState'  => 'PUBLISHED',
             'specificContent' => [
                 'com.linkedin.ugc.ShareContent' => [
                     'shareCommentary' => [
@@ -63,69 +74,70 @@ class LinkedInPoster extends SocialMediaPosterJob
             ],
         ];
 
-
-        if ($this->link != null) {
+        if ($this->link != null)
+        {
             $data = [
-                 'author' => 'urn:li:organization:' . $PAGE_ID,
-                 'lifecycleState' => 'PUBLISHED',
-                 'specificContent' => [
-                     'com.linkedin.ugc.ShareContent' => [
-                         'shareCommentary' => [
-                             'text' => $this->content,
-                         ],
-                         'shareMediaCategory' => 'ARTICLE',
-                         'media' => [
-                             [
-                                 'status' => 'READY',
-                                 'originalUrl' => $this->link,
-                             ],
-                         ],
-                     ],
-                 ],
-                 'visibility' => [
-                     'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC',
-                 ],
-             ];
+                'author'          => 'urn:li:organization:' . $PAGE_ID,
+                'lifecycleState'  => 'PUBLISHED',
+                'specificContent' => [
+                    'com.linkedin.ugc.ShareContent' => [
+                        'shareCommentary' => [
+                            'text' => $this->content,
+                        ],
+                        'shareMediaCategory' => 'ARTICLE',
+                        'media'              => [
+                            [
+                                'status'      => 'READY',
+                                'originalUrl' => $this->link,
+                            ],
+                        ],
+                    ],
+                ],
+                'visibility' => [
+                    'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC',
+                ],
+            ];
         }
-        if ($this->image != null) {
+        if ($this->image != null)
+        {
             //register image
             $image_register_data = [
-               "registerUploadRequest" => [
-                  "owner" => "urn:li:organization:".$PAGE_ID,
-                  "recipes" => [
-                     "urn:li:digitalmediaRecipe:feedshare-image",
-                  ],
-                  "serviceRelationships" => [
-                     [
-                        "identifier" => "urn:li:userGeneratedContent",
-                        "relationshipType" => "OWNER",
-                     ],
-                  ],
-                  "supportedUploadMechanism" => [
-                     "SYNCHRONOUS_UPLOAD",
-                  ],
-               ],
+                'registerUploadRequest' => [
+                    'owner'   => 'urn:li:organization:' . $PAGE_ID,
+                    'recipes' => [
+                        'urn:li:digitalmediaRecipe:feedshare-image',
+                    ],
+                    'serviceRelationships' => [
+                        [
+                            'identifier'       => 'urn:li:userGeneratedContent',
+                            'relationshipType' => 'OWNER',
+                        ],
+                    ],
+                    'supportedUploadMechanism' => [
+                        'SYNCHRONOUS_UPLOAD',
+                    ],
+                ],
             ];
 
-            $image_register_res = \Http::withHeaders(['Authorization' => "Bearer ".$ACCESS_TOKEN,'X-Restli-Protocol-Version' => "2.0.0","Content-Type" => "application/json"])->post('https://api.linkedin.com/v2/assets?action=registerUpload', $image_register_data);
-            $upload_url = $image_register_res->json()['value']['uploadMechanism']["com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"]["uploadUrl"];
+            $image_register_res = \Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0', 'Content-Type' => 'application/json'])->post('https://api.linkedin.com/v2/assets?action=registerUpload', $image_register_data);
+            $upload_url = $image_register_res->json()['value']['uploadMechanism']['com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest']['uploadUrl'];
             $upload = \Http::withBody(
                 file_get_contents($this->image),
                 'image/jpeg'
-            )->withHeaders(['Authorization' => "Bearer $ACCESS_TOKEN",'X-Restli-Protocol-Version' => "2.0.0"])->put($upload_url);
-            $check = \Http::withHeaders(['Authorization' => "Bearer ".$ACCESS_TOKEN,'X-Restli-Protocol-Version' => "2.0.0"])->get('https://api.linkedin.com/v2/assets/'. str_replace('urn:li:digitalmediaAsset:', '', $image_register_res->json()['value']['asset']))->json();
+            )->withHeaders(['Authorization' => "Bearer $ACCESS_TOKEN", 'X-Restli-Protocol-Version' => '2.0.0'])->put($upload_url);
+            $check = \Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0'])->get('https://api.linkedin.com/v2/assets/' . str_replace('urn:li:digitalmediaAsset:', '', $image_register_res->json()['value']['asset']))->json();
             $data = [
-                'author' => 'urn:li:organization:' . $PAGE_ID,
-                'lifecycleState' => 'PUBLISHED',
+                'author'          => 'urn:li:organization:' . $PAGE_ID,
+                'lifecycleState'  => 'PUBLISHED',
                 'specificContent' => [
                     'com.linkedin.ugc.ShareContent' => [
                         'shareCommentary' => [
                             'text' => $this->content,
                         ],
                         'shareMediaCategory' => 'IMAGE',
-                        'media' => [
+                        'media'              => [
                             [
-                                'media' => $image_register_res->json()['value']['asset'],
+                                'media'  => $image_register_res->json()['value']['asset'],
                                 'status' => 'READY',
                             ],
                         ],
@@ -137,9 +149,7 @@ class LinkedInPoster extends SocialMediaPosterJob
             ];
         }
 
-
-
-        $res = \Http::withHeaders(['Authorization' => "Bearer ".$ACCESS_TOKEN,'X-Restli-Protocol-Version' => "2.0.0","Content-Type" => "application/json"])->post('https://api.linkedin.com/v2/ugcPosts', $data);
+        $res = \Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0', 'Content-Type' => 'application/json'])->post('https://api.linkedin.com/v2/ugcPosts', $data);
 
         dd($res->json());
     }

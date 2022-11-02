@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * \SocialMedia\Poster\Models\SocialMediaSetting
  *
- * @property int $id
+ * @property int   $id
  * @property array $facebook
  * @property array $twitter
  * @property array $telegram
@@ -24,11 +24,11 @@ class SocialMediaSetting extends Model
 
     protected $casts = [
         'facebook' => 'array',
-        'twitter' => 'array',
+        'twitter'  => 'array',
         'telegram' => 'array',
         'linkedin' => 'array',
         'whatsapp' => 'array',
-        'google' => 'array',
+        'google'   => 'array',
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
