@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace SocialMedia\Poster\Jobs;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Bus\Queueable;

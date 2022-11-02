@@ -1,3 +1,6 @@
+<p align="center"><img src="/art/social-media-poster.png" alt="Social Media Poster"></p>
+
+
 # Push To Social [ Facebook , Twitter , Telegram , Linkedin ]
 
 via this package you can push notifications to [ Facebook , Twitter , Telegram , Linkedin ] 
@@ -5,24 +8,19 @@ via this package you can push notifications to [ Facebook , Twitter , Telegram ,
 - image ( Optional )
 - link ( Optional )
 
+```php
+(new SocialHelper($platforms=[],$content=[],$image='',$link=''))->push()
 ```
- 
-	(new SocialHelper($platforms=[],$content=[],$image='',$link=''))->push()
+## How To Push
 
+```php
+( new SocialHelper(
+    ['facebook','twitter','telegram','linkedin'],
+    ['Hello', 'Iam here','Message From Push to social'],
+    'https://nafezly.com/site_images/title.png',
+    'https://nafezly.com/'
+) )->push();
 ```
-# How To Push
-
-```
-
-	( new SocialHelper(
-		['facebook','twitter','telegram','linkedin'],
-		['Hello', 'Iam here','Message From Push to social'],
-		'https://nafezly.com/site_images/title.png',
-		'https://nafezly.com/'
-	) )->push();
-
-```
-![SocialHelper](https://github.com/peter-tharwat/push-to-social/blob/master/images/screenshot.png)
 
 # You have to install
 

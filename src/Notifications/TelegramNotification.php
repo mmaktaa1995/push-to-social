@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Notifications;
+namespace SocialMedia\Poster\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-
 use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramFile;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class TeleNotification extends Notification implements ShouldQueue
+class TelegramNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
     public $tries = 2;
     public $timeout = 10;
 
@@ -42,7 +42,8 @@ class TeleNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -55,18 +56,18 @@ class TeleNotification extends Notification implements ShouldQueue
         $content = "";
         foreach ($this->content as $con) {
             if (is_link($con)) {
-                $content = $content . '\n[افتح الرابط]('. $con.')' .' ' ;
+                $content = $content . '\n[افتح الرابط](' . $con . ')' . ' ';
             } else {
-                $content = $content .$con . ' ';
+                $content = $content . $con . ' ';
             }
         }
 
         if ($this->file != null) {
-            return TelegramFile::create()->to('@'.$this->to)
-            ->content($content)->file($this->file, 'photo')->disableNotification(! $this->notification);
+            return TelegramFile::create()->to('@' . $this->to)
+                ->content($content)->file($this->file, 'photo')->disableNotification(! $this->notification);
         } else {
-            return TelegramMessage::create()->to('@'.$this->to)
-            ->content($content)->disableNotification(! $this->notification);
+            return TelegramMessage::create()->to('@' . $this->to)
+                ->content($content)->disableNotification(! $this->notification);
         }
     }
 }

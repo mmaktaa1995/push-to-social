@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Jobs;
+namespace SocialMedia\Poster\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class LinkedInPoster implements ShouldQueue
+class LinkedInPoster extends SocialMediaPosterJob
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -20,14 +19,14 @@ class LinkedInPoster implements ShouldQueue
     public $content;
     public $image;
     public $link;
-    public $_SOCIAL_MEDIA_SETTINGS;
+    public $socialMediaSettings;
 
     public function __construct($content = [], $image = null, $link = null)
     {
         $this->content = $content;
         $this->image = $image;
         $this->link = $link;
-        $this->_SOCIAL_MEDIA_SETTINGS = \App\SocialMediaSetting::first();
+        $this->socialMediaSettings = \App\SocialMediaSetting::first();
 
         if ($this->link != null) {
             array_push($this->content, $this->link);
@@ -42,10 +41,10 @@ class LinkedInPoster implements ShouldQueue
 
     public function handle()
     {
-        $CLIENT_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['CLIENT_ID'];
-        $CLIENT_SECRET = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['CLIENT_SECRET'];
-        $ACCESS_TOKEN = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['ACCESS_TOKEN'];
-        $PAGE_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['PAGE_ID'];
+        $CLIENT_ID = json_decode($this->socialMediaSettings->linkedin, true)['CLIENT_ID'];
+        $CLIENT_SECRET = json_decode($this->socialMediaSettings->linkedin, true)['CLIENT_SECRET'];
+        $ACCESS_TOKEN = json_decode($this->socialMediaSettings->linkedin, true)['ACCESS_TOKEN'];
+        $PAGE_ID = json_decode($this->socialMediaSettings->linkedin, true)['PAGE_ID'];
 
 
         $data = [

@@ -1,24 +1,13 @@
 <?php
 
-namespace Social\PushToSocial;
+namespace SocialMedia\Poster;
 
-use App\Jobs\{FacebookPosterJob, LinkedInPoster, TelegramPosterJob, TwitterPosterJob};
-use App\SocialMediaSetting;
+use SocialMedia\Poster\Jobs\{FacebookPosterJob, LinkedInPoster, TelegramPosterJob, TwitterPosterJob};
+use SocialMedia\Poster\Models\SocialMediaSetting;
 
-class SocialHelper
+class SocialMedia extends SocialMediaAbstract
 {
-    /**
-     * @var \App\SocialMediaSetting
-     */
-    private $_SOCIAL_MEDIA_SETTINGS;
-
-    public function __construct(public $platforms = null, public $content = null, public $image = "DEFAULT", public $link = null)
-    {
-        //$this->inline_content=implode( " ", $content );
-        $this->_SOCIAL_MEDIA_SETTINGS = SocialMediaSetting::first();
-    }
-
-    public function push()
+    public function publish()
     {
         if (in_array("facebook", $this->platforms)) {
             $this->toFacebook();
@@ -36,21 +25,61 @@ class SocialHelper
 
     public function toFacebook()
     {
-        FacebookPosterJob::dispatch($this->content, $this->image, $this->link);
+        $settings = $this->socialMediaSettings->facebook;
+        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Facebook} provider is missing!"));
+        FacebookPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
+
+        return $this;
     }
 
     public function toTwitter()
     {
-        TwitterPosterJob::dispatch($this->content, $this->image, $this->link);
+        $settings = $this->socialMediaSettings->twitter;
+        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Twitter} provider is missing!"));
+
+        TwitterPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
+
+        return $this;
     }
 
     public function toLinkedin()
     {
-        LinkedInPoster::dispatch($this->content, $this->image, $this->link);
+        $settings = $this->socialMediaSettings->linkedin;
+        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Linkedin} provider is missing!"));
+        LinkedInPoster::dispatch($settings, $this->content, $this->image, $this->link);
+
+        return $this;
     }
 
     public function toTelegram()
     {
-        TelegramPosterJob::dispatch($this->content, $this->image, $this->link);
+        $settings = $this->socialMediaSettings->telegram;
+        throw_if(! count($settings), new \MissingSocialMediaSettingsException("Settings for {Telegram} provider is missing!"));
+        TelegramPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
+
+        return $this;
+    }
+
+    protected function getSocialMediaSettings()
+    {
+        return SocialMediaSetting::query()->first();
+    }
+
+    public function setContent($content = '')
+    {
+        $this->content = $content;
+        return $content;
+    }
+
+    public function setLink($link = '')
+    {
+        $this->link = $link;
+        return $link;
+    }
+
+    public function setImage($image = 'DEFAULT')
+    {
+        $this->image = $image;
+        return $image;
     }
 }

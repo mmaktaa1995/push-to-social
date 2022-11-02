@@ -1,46 +1,16 @@
 <?php
 
-namespace App\Jobs;
+namespace SocialMedia\Poster\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-
-class FacebookPosterJob implements ShouldQueue
+class FacebookPosterJob extends SocialMediaPosterJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-
-    public $tries = 2;
-    public $timeout = 10;
-    public $_SOCIAL_MEDIA_SETTINGS;
-
-    public function __construct(public $content = [], public  $image = null, public $link = null)
-    {
-        $this->_SOCIAL_MEDIA_SETTINGS = \App\SocialMediaSetting::first();
-
-        if ($this->link != null) {
-            $this->content[] = $this->link;
-        }
-        if ($this->image == "NO") {
-            $this->image = null;
-        } elseif ($this->image == "DEFAULT") {
-            $this->image = "https://nafezly.com/site_images/title.png?v=1";
-        }
-        $this->content = implode("\n", $this->content);
-    }
-
     public function handle()
     {
-        $APP_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['APP_ID'];
-        $CLIENT_SECRET = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['CLIENT_SECRET'];
-        $PAGE_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['PAGE_ID'];
-        $FB_TOKEN = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['FB_ACCESS_TOKEN'];
-        $PAGE_ACCESS_TOKEN = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['PAGE_ACCESS_TOKEN'];
+        $APP_ID = json_decode($this->socialMediaSettings->facebook, true)['APP_ID'];
+        $CLIENT_SECRET = json_decode($this->socialMediaSettings->facebook, true)['CLIENT_SECRET'];
+        $PAGE_ID = json_decode($this->socialMediaSettings->facebook, true)['PAGE_ID'];
+        $FB_TOKEN = json_decode($this->socialMediaSettings->facebook, true)['FB_ACCESS_TOKEN'];
+        $PAGE_ACCESS_TOKEN = json_decode($this->socialMediaSettings->facebook, true)['PAGE_ACCESS_TOKEN'];
 
         $fb = new \Facebook\Facebook([
             'app_id' => $APP_ID,
