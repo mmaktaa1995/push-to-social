@@ -68,18 +68,21 @@ class SocialMedia extends SocialMediaAbstract
     public function setContent($content = '')
     {
         $this->content = $content;
+
         return $content;
     }
 
     public function setLink($link = '')
     {
         $this->link = $link;
+
         return $link;
     }
 
     public function setImage($image = 'DEFAULT')
     {
         $this->image = $image;
+
         return $image;
     }
 }
