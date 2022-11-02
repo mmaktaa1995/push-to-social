@@ -1,0 +1,52 @@
+{
+    "name": "mohammadaktaa/social-media-poster",
+    "description": "Push posts, tweets and messages to social media",
+    "type": "library",
+    "require": {
+        "php": ">=8.0",
+        "abraham/twitteroauth": "dev-main",
+        "facebook/graph-sdk": "^5.1",
+        "friendsofphp/php-cs-fixer": "dev-master",
+        "laravel-notification-channels/telegram": "^2.1",
+        "laravel/framework": "^9.19"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohammad Aktaa",
+            "email": "mmaktaa1995@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SocialMedia\\Poster\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SocialMedia\\Poster\\Tests\\": "tests"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "9.5.x-dev",
+        "vimeo/psalm": "5.x-dev"
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes --config=.php_cs.dist.php "
+    },
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SocialMedia\\Poster\\SocialMediaServiceProvider"
+            ]
+        }
+    }
+}

@@ -18,6 +18,6 @@ class SocialMediaSetting extends Model
         'google'=>'array',
         'publish_settings'=>'array'
     ];*/
-    protected $table="social_media_settings";
+    protected $table = "social_media_settings";
     protected $guarded = ['id', 'created_at', 'updated_at'];
 }

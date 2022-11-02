@@ -4,46 +4,39 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 use NotificationChannels\Telegram\TelegramChannel;
-use NotificationChannels\Telegram\TelegramMessage;
 use NotificationChannels\Telegram\TelegramFile;
-
-use Telegram\Bot\Api;
-use Telegram\Bot\FileUpload\InputFile;
+use NotificationChannels\Telegram\TelegramMessage;
 
 class TeleNotification extends Notification implements ShouldQueue
 {
-    
     use Queueable;
     public $tries = 2;
     public $timeout = 10;
- 
+
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public $content; 
+    public $content;
     public $file;
-    public $notification; 
+    public $notification;
     public $to;
 
-
     public function __construct(
-        $content=[], 
-        $file=null, 
-        $to="nafezly",
-        $notification=true
-    )
-    {
-        $this->content=$content; 
-        $this->file=$file;
-        $this->notification=$notification; 
-        $this->to=$to;
+        $content = [],
+        $file = null,
+        $to = "nafezly",
+        $notification = true
+    ) {
+        $this->content = $content;
+        $this->file = $file;
+        $this->notification = $notification;
+        $this->to = $to;
     }
 
     /**
@@ -57,25 +50,23 @@ class TeleNotification extends Notification implements ShouldQueue
         return [TelegramChannel::class];
     }
 
-
     public function toTelegram($notifiable)
-    { 
-        $content ="";
-        foreach($this->content as $con){
-            if(is_link($con)){
-               $content = $content . '\n[افتح الرابط]('. $con.')' .' ' ;
-            }else
-            {
+    {
+        $content = "";
+        foreach ($this->content as $con) {
+            if (is_link($con)) {
+                $content = $content . '\n[افتح الرابط]('. $con.')' .' ' ;
+            } else {
                 $content = $content .$con . ' ';
             }
         }
 
-        if($this->file!=null)
+        if ($this->file != null) {
             return TelegramFile::create()->to('@'.$this->to)
-            ->content($content)->file($this->file, 'photo')->disableNotification(!$this->notification);
-        else
+            ->content($content)->file($this->file, 'photo')->disableNotification(! $this->notification);
+        } else {
             return TelegramMessage::create()->to('@'.$this->to)
-            ->content($content)->disableNotification(!$this->notification);      
+            ->content($content)->disableNotification(! $this->notification);
+        }
     }
-
 }
