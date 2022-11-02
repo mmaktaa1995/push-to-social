@@ -20,7 +20,7 @@ class SocialMediaServiceProvider extends ServiceProvider
             __DIR__ . '/../config/social-media-poster.php' => config_path('social-media-poster.php'),
         ], 'config');
 
-        if (! class_exists('CreateMediaTable')) {
+        if (! class_exists('CreateSocialMediaSettingsTable')) {
             $this->publishes([
                 __DIR__ . '/../database/migrations/create_social_media_settings_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_media_settings_table.php'),
             ], 'migrations');
