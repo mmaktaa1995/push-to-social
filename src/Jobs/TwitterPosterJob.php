@@ -3,11 +3,9 @@
 namespace SocialMedia\Poster\Jobs;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class TwitterPosterJob implements ShouldQueue
 {
