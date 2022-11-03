@@ -2,15 +2,18 @@
 
 namespace SocialMedia\Poster\Jobs;
 
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
+
 class FacebookPosterJob extends SocialMediaPosterJob
 {
     public function handle()
     {
-        $APP_ID = json_decode($this->socialMediaSettings->facebook, true)['APP_ID'];
-        $CLIENT_SECRET = json_decode($this->socialMediaSettings->facebook, true)['CLIENT_SECRET'];
-        $PAGE_ID = json_decode($this->socialMediaSettings->facebook, true)['PAGE_ID'];
-        $FB_TOKEN = json_decode($this->socialMediaSettings->facebook, true)['FB_ACCESS_TOKEN'];
-        $PAGE_ACCESS_TOKEN = json_decode($this->socialMediaSettings->facebook, true)['PAGE_ACCESS_TOKEN'];
+        $APP_ID = $this->socialMediaSettings['APP_ID'];
+        $CLIENT_SECRET = $this->socialMediaSettings['CLIENT_SECRET'];
+        $PAGE_ID = $this->socialMediaSettings['PAGE_ID'];
+//        $FB_TOKEN = $this->socialMediaSettings->facebook['FB_ACCESS_TOKEN'];
+        $PAGE_ACCESS_TOKEN = $this->socialMediaSettings['PAGE_ACCESS_TOKEN'];
 
         $fb = new \Facebook\Facebook([
             'app_id'                => $APP_ID,
@@ -47,12 +50,12 @@ class FacebookPosterJob extends SocialMediaPosterJob
                 );
             }
         }
-        catch (FacebookExceptionsFacebookResponseException $e)
+        catch (FacebookResponseException $e)
         {
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
         }
-        catch (FacebookExceptionsFacebookSDKException $e)
+        catch (FacebookSDKException $e)
         {
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;

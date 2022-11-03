@@ -22,6 +22,9 @@ abstract class SocialMediaPosterJob implements ShouldQueue
 
     public $timeout = 10;
 
+    /**
+     * @var array
+     */
     public $socialMediaSettings;
 
     public function __construct(public $settings = [], public $content = [], public $image = null, public $link = null)

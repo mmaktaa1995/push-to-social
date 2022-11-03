@@ -4,7 +4,7 @@ namespace SocialMedia\Poster;
 
 use SocialMedia\Poster\Exceptions\MissingSocialMediaSettingsException;
 use SocialMedia\Poster\Jobs\FacebookPosterJob;
-use SocialMedia\Poster\Jobs\LinkedInPoster;
+use SocialMedia\Poster\Jobs\LinkedInPosterJob;
 use SocialMedia\Poster\Jobs\TelegramPosterJob;
 use SocialMedia\Poster\Jobs\TwitterPosterJob;
 use SocialMedia\Poster\Models\SocialMediaSetting;
@@ -54,7 +54,7 @@ class SocialMedia extends SocialMediaAbstract
     {
         $settings = $this->socialMediaSettings->linkedin;
         throw_if(!count($settings), new MissingSocialMediaSettingsException('Settings for {Linkedin} provider is missing!'));
-        LinkedInPoster::dispatch($settings, $this->content, $this->image, $this->link);
+        LinkedInPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
 
         return $this;
     }
@@ -77,20 +77,20 @@ class SocialMedia extends SocialMediaAbstract
     {
         $this->content = $content;
 
-        return $content;
+        return $this;
     }
 
     public function setLink($link = '')
     {
         $this->link = $link;
 
-        return $link;
+        return $this;
     }
 
     public function setImage($image = 'DEFAULT')
     {
         $this->image = $image;
 
-        return $image;
+        return $this;
     }
 }

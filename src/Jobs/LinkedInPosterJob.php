@@ -2,14 +2,16 @@
 
 namespace SocialMedia\Poster\Jobs;
 
-class LinkedInPoster extends SocialMediaPosterJob
+use Illuminate\Support\Facades\Http;
+
+class LinkedInPosterJob extends SocialMediaPosterJob
 {
     public function handle()
     {
-        $CLIENT_ID = json_decode($this->socialMediaSettings->linkedin, true)['CLIENT_ID'];
-        $CLIENT_SECRET = json_decode($this->socialMediaSettings->linkedin, true)['CLIENT_SECRET'];
-        $ACCESS_TOKEN = json_decode($this->socialMediaSettings->linkedin, true)['ACCESS_TOKEN'];
-        $PAGE_ID = json_decode($this->socialMediaSettings->linkedin, true)['PAGE_ID'];
+//        $CLIENT_ID = $this->socialMediaSettings['CLIENT_ID'];
+//        $CLIENT_SECRET = $this->socialMediaSettings['CLIENT_SECRET'];
+        $ACCESS_TOKEN = $this->socialMediaSettings['ACCESS_TOKEN'];
+        $PAGE_ID = $this->socialMediaSettings['PAGE_ID'];
 
         $data = [
             'author'          => 'urn:li:organization:' . $PAGE_ID,
@@ -72,13 +74,14 @@ class LinkedInPoster extends SocialMediaPosterJob
                 ],
             ];
 
-            $image_register_res = \Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0', 'Content-Type' => 'application/json'])->post('https://api.linkedin.com/v2/assets?action=registerUpload', $image_register_data);
+            $image_register_res = Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0', 'Content-Type' => 'application/json'])->post('https://api.linkedin.com/v2/assets?action=registerUpload', $image_register_data);
             $upload_url = $image_register_res->json()['value']['uploadMechanism']['com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest']['uploadUrl'];
-            $upload = \Http::withBody(
+            Http::withBody(
                 file_get_contents($this->image),
                 'image/jpeg'
             )->withHeaders(['Authorization' => "Bearer $ACCESS_TOKEN", 'X-Restli-Protocol-Version' => '2.0.0'])->put($upload_url);
-            $check = \Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0'])->get('https://api.linkedin.com/v2/assets/' . str_replace('urn:li:digitalmediaAsset:', '', $image_register_res->json()['value']['asset']))->json();
+
+            Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0'])->get('https://api.linkedin.com/v2/assets/' . str_replace('urn:li:digitalmediaAsset:', '', $image_register_res->json()['value']['asset']))->json();
             $data = [
                 'author'          => 'urn:li:organization:' . $PAGE_ID,
                 'lifecycleState'  => 'PUBLISHED',
@@ -102,7 +105,7 @@ class LinkedInPoster extends SocialMediaPosterJob
             ];
         }
 
-        $res = \Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0', 'Content-Type' => 'application/json'])->post('https://api.linkedin.com/v2/ugcPosts', $data);
+        $res = Http::withHeaders(['Authorization' => 'Bearer ' . $ACCESS_TOKEN, 'X-Restli-Protocol-Version' => '2.0.0', 'Content-Type' => 'application/json'])->post('https://api.linkedin.com/v2/ugcPosts', $data);
 
         dd($res->json());
     }

@@ -3,22 +3,15 @@
 namespace SocialMedia\Poster\Jobs;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
 
-class TwitterPosterJob implements ShouldQueue
+class TwitterPosterJob extends SocialMediaPosterJob
 {
-    use Dispatchable;
-
-    use InteractsWithQueue;
-
-    public function __construct($content = [], $image = null, $link = null)
+    public function __construct($settings = [], $content = [], $image = null, $link = null)
     {
         $this->content = $content;
         $this->image = $image;
         $this->link = $link;
-        $this->_SOCIAL_MEDIA_SETTINGS = \App\SocialMediaSetting::first();
+        $this->socialMediaSettings = $settings;
 
         if ($this->link != null)
         {
@@ -41,25 +34,25 @@ class TwitterPosterJob implements ShouldQueue
 
     public function handle()
     {
-        $API_KEY = json_decode($this->_SOCIAL_MEDIA_SETTINGS->twitter, true)['API_KEY'];
-        $API_SECRET_KEY = json_decode($this->_SOCIAL_MEDIA_SETTINGS->twitter, true)['API_SECRET_KEY'];
-        $BEARER_TOKEN = json_decode($this->_SOCIAL_MEDIA_SETTINGS->twitter, true)['BEARER_TOKEN'];
-        $ACCESS_TOKEN = json_decode($this->_SOCIAL_MEDIA_SETTINGS->twitter, true)['ACCESS_TOKEN'];
-        $ACCESS_TOKEN_SECRET = json_decode($this->_SOCIAL_MEDIA_SETTINGS->twitter, true)['ACCESS_TOKEN_SECRET'];
+        $API_KEY = $this->socialMediaSettings['API_KEY'];
+        $API_SECRET_KEY = $this->socialMediaSettings['API_SECRET_KEY'];
+//        $BEARER_TOKEN = $this->socialMediaSettings['BEARER_TOKEN'];
+        $ACCESS_TOKEN = $this->socialMediaSettings['ACCESS_TOKEN'];
+        $ACCESS_TOKEN_SECRET = $this->socialMediaSettings['ACCESS_TOKEN_SECRET'];
 
         $twitter = new TwitterOAuth($API_KEY, $API_SECRET_KEY, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
-        $contentx = $twitter->get('account/verify_credentials');
+        $twitter->get('account/verify_credentials');
 
         if ($this->image != null)
         {
             try
             {
                 $uniqid = uniqid();
-                \Image::make($this->image)->save(public_path('social_images/' . $uniqid . '.jpg'));
+//                Image::make($this->image)->save(public_path('social_images/' . $uniqid . '.jpg'));
                 $imageMedia = $twitter->upload('media/upload', ['media' => public_path('social_images/' . $uniqid . '.jpg')]);
                 $parameters = ['status' => $this->content, 'media_ids' => $imageMedia->media_id_string];
             }
-            catch(\Exception $e)
+            catch (\Exception $e)
             {
                 $parameters = ['status' => $this->content];
             }

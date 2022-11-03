@@ -39,7 +39,7 @@ class SocialMediaServiceProvider extends ServiceProvider
                 $platforms = $this->getAvailablePlatforms();
             }
 
-            return new SocialMedia(new $platforms());
+            return new SocialMedia($platforms);
         });
     }
 
