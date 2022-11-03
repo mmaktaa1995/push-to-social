@@ -4,6 +4,7 @@ namespace SocialMedia\Poster\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use SocialMedia\Poster\Models\SocialMediaSetting;
 
 class SocialMediaAuthController
 {
@@ -16,7 +17,7 @@ class SocialMediaAuthController
     public function handleProviderCallback_facebook_poster()
     {
         session_start();
-        $this->_SOCIAL_MEDIA_SETTINGS = \App\SocialMediaSetting::first();
+        $this->_SOCIAL_MEDIA_SETTINGS = SocialMediaSetting::first();
         $APP_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['APP_ID'];
         $CLIENT_SECRET = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['CLIENT_SECRET'];
         $PAGE_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['PAGE_ID'];
@@ -94,14 +95,14 @@ class SocialMediaAuthController
         }
         session(['fb_access_token' => (string) $accessToken]);
 
-        $_SOCIAL_MEDIA_SETTINGS_FACEBOOK = \App\SocialMediaSetting::first()->facebook;
+        $_SOCIAL_MEDIA_SETTINGS_FACEBOOK = SocialMediaSetting::first()->facebook;
         $_SOCIAL_MEDIA_SETTINGS_FACEBOOK = json_decode($_SOCIAL_MEDIA_SETTINGS_FACEBOOK, true);
 
         $page_access_token = Http::get('https://graph.facebook.com/' . $_SOCIAL_MEDIA_SETTINGS_FACEBOOK['PAGE_ID'] . '?fields=access_token&access_token=' . $accessToken->getValue())->json();
 
         $_SOCIAL_MEDIA_SETTINGS_FACEBOOK['FB_ACCESS_TOKEN'] = $accessToken->getValue();
         $_SOCIAL_MEDIA_SETTINGS_FACEBOOK['PAGE_ACCESS_TOKEN'] = $page_access_token['access_token'];
-        \App\SocialMediaSetting::where('id', '<>', 0)->update(['facebook' => $_SOCIAL_MEDIA_SETTINGS_FACEBOOK]);
+        SocialMediaSetting::where('id', '<>', 0)->update(['facebook' => $_SOCIAL_MEDIA_SETTINGS_FACEBOOK]);
         //dd($accessToken->getValue());
         //dd($helper->getPageId());
         return redirect('/admin/schedule-posts-posts')->with('data', ['alert' => 'Now (Publishing) Is Authenticated To Post Posts On Facebook', 'alert-type' => 'success']);
@@ -109,12 +110,12 @@ class SocialMediaAuthController
 
     public function handleProviderCallback_linkedin_poster(Request $request)
     {
-        $_SOCIAL_MEDIA_SETTINGS_LINKEDIN = \App\SocialMediaSetting::first()->linkedin;
+        $_SOCIAL_MEDIA_SETTINGS_LINKEDIN = SocialMediaSetting::first()->linkedin;
         $_SOCIAL_MEDIA_SETTINGS_LINKEDIN = json_decode($_SOCIAL_MEDIA_SETTINGS_LINKEDIN, true);
         $_SOCIAL_MEDIA_SETTINGS_LINKEDIN['CODE'] = $request->code;
-        \App\SocialMediaSetting::where('id', '<>', 0)->update(['linkedin' => $_SOCIAL_MEDIA_SETTINGS_LINKEDIN]);
+        SocialMediaSetting::where('id', '<>', 0)->update(['linkedin' => $_SOCIAL_MEDIA_SETTINGS_LINKEDIN]);
 
-        $this->_SOCIAL_MEDIA_SETTINGS = \App\SocialMediaSetting::first();
+        $this->_SOCIAL_MEDIA_SETTINGS = SocialMediaSetting::first();
         $CLIENT_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['CLIENT_ID'];
         $CLIENT_SECRET = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['CLIENT_SECRET'];
         $REDIRECT_URL = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['REDIRECT_URL'];
@@ -122,12 +123,12 @@ class SocialMediaAuthController
         $res = \Http::withHeaders(['content-type' => 'application/x-www-form-urlencoded'])->post(
             "https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=$CODE&redirect_uri=$REDIRECT_URL&client_id=$CLIENT_ID&client_secret=$CLIENT_SECRET"
         );
-        $_SOCIAL_MEDIA_SETTINGS_LINKEDIN = \App\SocialMediaSetting::first()->linkedin;
+        $_SOCIAL_MEDIA_SETTINGS_LINKEDIN = SocialMediaSetting::first()->linkedin;
         $_SOCIAL_MEDIA_SETTINGS_LINKEDIN = json_decode($_SOCIAL_MEDIA_SETTINGS_LINKEDIN, true);
         $_SOCIAL_MEDIA_SETTINGS_LINKEDIN['ACCESS_TOKEN'] = $res->json()['access_token'];
         $_SOCIAL_MEDIA_SETTINGS_LINKEDIN['REFRESH_ACCESS_TOKEN'] = $res->json()['refresh_token'];
         $_SOCIAL_MEDIA_SETTINGS_LINKEDIN['ACCESS_TOKEN_EXPIRATION_DATE'] = \Carbon::parse(now())->addDays(60);
-        \App\SocialMediaSetting::where('id', '<>', 0)->update(['linkedin' => $_SOCIAL_MEDIA_SETTINGS_LINKEDIN]);
+        SocialMediaSetting::where('id', '<>', 0)->update(['linkedin' => $_SOCIAL_MEDIA_SETTINGS_LINKEDIN]);
 
         return redirect('/admin/schedule-posts')->with('data', ['alert' => 'Now (Nafezly Publishing) Is Authenticated To Post Posts On LinkedIn', 'alert-type' => 'success']);
     }
@@ -135,7 +136,7 @@ class SocialMediaAuthController
     public function authenticate_facebook_application()
     {
         session_start();
-        $this->_SOCIAL_MEDIA_SETTINGS = \App\SocialMediaSetting::first();
+        $this->_SOCIAL_MEDIA_SETTINGS = SocialMediaSetting::first();
         $APP_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['APP_ID'];
         $CLIENT_SECRET = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['CLIENT_SECRET'];
         $PAGE_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->facebook, true)['PAGE_ID'];
@@ -156,7 +157,7 @@ class SocialMediaAuthController
 
     public function authenticate_linkedin_application()
     {
-        $this->_SOCIAL_MEDIA_SETTINGS = \App\SocialMediaSetting::first();
+        $this->_SOCIAL_MEDIA_SETTINGS = SocialMediaSetting::first();
         $CLIENT_ID = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['CLIENT_ID'];
         $CLIENT_SECRET = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['CLIENT_SECRET'];
         $REDIRECT_URL = json_decode($this->_SOCIAL_MEDIA_SETTINGS->linkedin, true)['REDIRECT_URL'];

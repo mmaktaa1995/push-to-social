@@ -3,6 +3,7 @@
 namespace SocialMedia\Poster\Exceptions;
 
 use Exception;
+use Throwable;
 
 class MissingSocialMediaSettingsException extends Exception
 {
