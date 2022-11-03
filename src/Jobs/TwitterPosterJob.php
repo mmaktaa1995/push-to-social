@@ -15,22 +15,6 @@ class TwitterPosterJob implements ShouldQueue
 
     use InteractsWithQueue;
 
-    use Queueable;
-
-    use SerializesModels;
-
-    public $tries = 2;
-
-    public $timeout = 10;
-
-    public $content;
-
-    public $image;
-
-    public $link;
-
-    public $_SOCIAL_MEDIA_SETTINGS;
-
     public function __construct($content = [], $image = null, $link = null)
     {
         $this->content = $content;

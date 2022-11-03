@@ -24,31 +24,26 @@ via this package you can push notifications to [ Facebook , Twitter , Telegram ,
 
 # You have to install
 
-```
-
-	composer require abraham/twitteroauth
-	composer require facebook/graph-sdk
-	composer require laravel-notification-channels/telegram
-
+```console
+composer require abraham/twitteroauth
+composer require facebook/graph-sdk
+composer require laravel-notification-channels/telegram
 ```
 
 # Migrations for laravel
 
-```
+```php
+Schema::create('social_media_settings', function (Blueprint $table) {
+    $table->bigIncrements('id');
+    $table->json('facebook')->nullable();
+    $table->json('twitter')->nullable();
+    $table->json('telegram')->nullable();
+    $table->json('linkedin')->nullable();
+    $table->json('whatsapp')->nullable();
+    $table->json('google')->nullable();
 
-	Schema::create('social_media_settings', function (Blueprint $table) {
-        $table->bigIncrements('id');
-
-        $table->text('facebook')->nullable();
-        $table->text('twitter')->nullable();
-        $table->text('linkedin')->nullable(); 
-        $table->text('telegram')->nullable(); 
-
-        $table->text('publish_settings')->nullable();
-
-        $table->timestamps();
-    });
-
+    $table->timestamps();
+});
 ```
 - Create Jobs folder inside app folder
 - Move all Jobs in the repo to Jobs Folder
@@ -61,56 +56,48 @@ via this package you can push notifications to [ Facebook , Twitter , Telegram ,
 
 # Seed Database
 
--facebook
+- facebook
 
+```json
+{
+   "FB_ACCESS_TOKEN":"",
+   "APP_ID":"",
+   "CLIENT_SECRET":"",
+   "PAGE_ID":"",
+   "REDIRECT_URL":"",
+   "PAGE_ACCESS_TOKEN":""
+}
 ```
+- twitter
 
-	{
-	   "FB_ACCESS_TOKEN":"",
-	   "APP_ID":"",
-	   "CLIENT_SECRET":"",
-	   "PAGE_ID":"",
-	   "REDIRECT_URL":"",
-	   "PAGE_ACCESS_TOKEN":""
-	}
-
+```json
+{
+   "API_KEY":"",
+   "API_SECRET_KEY":"",
+   "BEARER_TOKEN":"",
+   "ACCESS_TOKEN":"",
+   "ACCESS_TOKEN_SECRET":""
+}
 ```
--twitter
+- linkedin
 
+```json
+{
+   "CLIENT_ID":"",
+   "CLIENT_SECRET":"",
+   "REDIRECT_URL":"",
+   "SCOPES":"r_emailaddress,r_basicprofile,w_member_social,w_organization_social,rw_organization_admin,rw_ads",
+   "CODE":"",
+   "ACCESS_TOKEN":"",
+   "REFRESH_ACCESS_TOKEN":"",
+   "ACCESS_TOKEN_EXPIRATION_DATE":"",
+   "PAGE_ID":""
+}
 ```
+- telegram
 
-	{
-	   "API_KEY":"",
-	   "API_SECRET_KEY":"",
-	   "BEARER_TOKEN":"",
-	   "ACCESS_TOKEN":"",
-	   "ACCESS_TOKEN_SECRET":""
-	}
-
-```
--linkedin
-
-```
-
-	{
-	   "CLIENT_ID":"",
-	   "CLIENT_SECRET":"",
-	   "REDIRECT_URL":"",
-	   "SCOPES":"r_emailaddress,r_basicprofile,w_member_social,w_organization_social,rw_organization_admin,rw_ads",
-	   "CODE":"",
-	   "ACCESS_TOKEN":"",
-	   "REFRESH_ACCESS_TOKEN":"",
-	   "ACCESS_TOKEN_EXPIRATION_DATE":"",
-	   "PAGE_ID":""
-	}
-
-```
--telegram
-
-```
-
-	{
-	   "TELEGRAM_BOT_TOKEN":""
-	}
-
+```json
+{
+   "TELEGRAM_BOT_TOKEN":""
+}
 ```
