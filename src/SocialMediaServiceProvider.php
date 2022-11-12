@@ -25,7 +25,7 @@ class SocialMediaServiceProvider extends ServiceProvider
         ], 'migrations');
 
         $this->publishes([
-            __DIR__ . '/Http/Controllers/SocialMediaAuthController.php' => app_path('Http/Controllers/SocialMediaAuthController.php')
+            __DIR__ . '/Http/Controllers/SocialMediaAuthController.php' => app_path('Http/Controllers/SocialMediaAuthController.php'),
         ], 'controller');
     }
 
@@ -35,14 +35,15 @@ class SocialMediaServiceProvider extends ServiceProvider
 
         $this->app->singleton(SocialMedia::class, function () {
             $platforms = config('social-media-poster.platforms');
-            if ($platforms == '*') {
+            if ($platforms == '*')
+            {
                 $platforms = $this->getAvailablePlatforms();
             }
 
             return new SocialMedia($platforms);
         });
 
-        $this->app->bind(SocialMediaAuthController::class, function (){
+        $this->app->bind(SocialMediaAuthController::class, function () {
             $publishedController = '\App\Http\Controllers\SocialMediaAuthController';
             return new (class_exists($publishedController) ? $publishedController : SocialMediaAuthController::class);
         });

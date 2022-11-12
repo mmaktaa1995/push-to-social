@@ -2,10 +2,7 @@
 
 namespace SocialMedia\Poster\Tests\Unit;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Storage;
 use SocialMedia\Poster\Jobs\FacebookPosterJob;
 use SocialMedia\Poster\Models\SocialMediaSetting;
 use SocialMedia\Poster\SocialMedia;
@@ -21,19 +18,19 @@ class SocialMediaTest extends TestCase
         $collection = collect();
         $item1 = SocialMediaSetting::query()->create([
             'facebook' => [
-                'app_id' => 12312321
-            ]
+                'app_id' => 12312321,
+            ],
         ]);
 
         $collection->push($item1);
         $item2 = SocialMediaSetting::query()->create([
             'facebook' => [
-                'app_id' => '2342fds'
-            ]
+                'app_id' => '2342fds',
+            ],
         ]);
 
         $this->assertDatabaseHas('social_media_settings', ['facebook' => json_encode([
-            'app_id' => 12312321
+            'app_id' => 12312321,
         ])]);
 
         $this->assertContains($item1, $collection);
@@ -43,6 +40,7 @@ class SocialMediaTest extends TestCase
 
     /**
      * @test
+     *
      * @testdox Post to facebook
      */
     public function test_it_can_post_to_facebook()
@@ -50,8 +48,8 @@ class SocialMediaTest extends TestCase
         $this->busFake();
         SocialMediaSetting::query()->create([
             'facebook' => [
-                'app_id' => '2342fds'
-            ]
+                'app_id' => '2342fds',
+            ],
         ]);
 
         $socialMedia = new SocialMedia([], 'test');
@@ -59,6 +57,5 @@ class SocialMediaTest extends TestCase
 
         Bus::assertDispatched(FacebookPosterJob::class);
         $this->assertTrue($socialMedia->content == 'test');
-
     }
 }

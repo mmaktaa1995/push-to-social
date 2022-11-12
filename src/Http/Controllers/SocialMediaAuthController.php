@@ -98,7 +98,7 @@ class SocialMediaAuthController
         }
         session(['fb_access_token' => (string) $accessToken]);
 
-        $pageAccessToken = Http::get('https://graph.facebook.com/' . ($socialMediaSettingsFacebook['PAGE_ID']??$helper->getPageId()) . '?fields=access_token&access_token=' . $accessToken->getValue())->json();
+        $pageAccessToken = Http::get('https://graph.facebook.com/' . ($socialMediaSettingsFacebook['PAGE_ID'] ?? $helper->getPageId()) . '?fields=access_token&access_token=' . $accessToken->getValue())->json();
 
         $socialMediaSettingsFacebook['FB_ACCESS_TOKEN'] = $accessToken->getValue();
         $socialMediaSettingsFacebook['PAGE_ACCESS_TOKEN'] = $pageAccessToken['access_token'];
