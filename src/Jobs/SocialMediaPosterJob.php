@@ -31,20 +31,17 @@ abstract class SocialMediaPosterJob implements ShouldQueue
     {
         $this->socialMediaSettings = $settings;
 
-        if ($this->link != null)
-        {
+        if ($this->link != null) {
             $this->content[] = $this->link;
         }
 
-        if ($this->image == 'NO')
-        {
+        if ($this->image == 'NO') {
             $this->image = null;
-        }
-        elseif ($this->image == 'DEFAULT')
-        {
+        } elseif ($this->image == 'DEFAULT') {
             $this->image = config('social-media-poster.default_image');
         }
 
         $this->content = implode("\n", $this->content);
     }
+
 }

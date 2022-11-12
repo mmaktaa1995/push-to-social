@@ -11,7 +11,7 @@ abstract class SocialMediaAbstract
      */
     protected $socialMediaSettings;
 
-    public function __construct(public $platforms = null, public $content = null, public $image = 'DEFAULT', public $link = null)
+    public function __construct(public $platforms = [], public $content = null, public $image = 'DEFAULT', public $link = null)
     {
         $this->socialMediaSettings = $this->getSocialMediaSettings();
     }

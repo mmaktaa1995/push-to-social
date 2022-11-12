@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\MediaLibrary;
+namespace SocialMedia\Poster;
 
 use Illuminate\Support\ServiceProvider;
-use SocialMedia\Poster\SocialMedia;
+use SocialMedia\Poster\Http\Controllers\SocialMediaAuthController;
 
 class SocialMediaServiceProvider extends ServiceProvider
 {
@@ -20,12 +20,13 @@ class SocialMediaServiceProvider extends ServiceProvider
             __DIR__ . '/../config/social-media-poster.php' => config_path('social-media-poster.php'),
         ], 'config');
 
-        if (!class_exists('CreateSocialMediaSettingsTable'))
-        {
-            $this->publishes([
-                __DIR__ . '/../database/migrations/create_social_media_settings_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_media_settings_table.php'),
-            ], 'migrations');
-        }
+        $this->publishes([
+            __DIR__ . '/../database/migrations/create_social_media_settings_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_media_settings_table.php'),
+        ], 'migrations');
+
+        $this->publishes([
+            __DIR__ . '/Http/Controllers/SocialMediaAuthController.php' => app_path('Http/Controllers/SocialMediaAuthController.php')
+        ], 'controller');
     }
 
     public function register()
@@ -34,12 +35,16 @@ class SocialMediaServiceProvider extends ServiceProvider
 
         $this->app->singleton(SocialMedia::class, function () {
             $platforms = config('social-media-poster.platforms');
-            if ($platforms == '*')
-            {
+            if ($platforms == '*') {
                 $platforms = $this->getAvailablePlatforms();
             }
 
             return new SocialMedia($platforms);
+        });
+
+        $this->app->bind(SocialMediaAuthController::class, function (){
+            $publishedController = '\App\Http\Controllers\SocialMediaAuthController';
+            return new (class_exists($publishedController) ? $publishedController : SocialMediaAuthController::class);
         });
     }
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.002888">
-    <testsuite name="Aktaa Test Suite" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.002888">
-      <testsuite name="SocialMedia\Poster\Tests\Unit\SocialMediaTest" file="/Users/mohammadaktaa/Desktop/Sites/push-to-social-package/tests/Unit/SocialMediaTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.002888">
-        <testcase name="test_example" class="SocialMedia\Poster\Tests\Unit\SocialMediaTest" classname="SocialMedia.Poster.Tests.Unit.SocialMediaTest" file="/Users/mohammadaktaa/Desktop/Sites/push-to-social-package/tests/Unit/SocialMediaTest.php" line="12" assertions="1" time="0.002888"/>
+  <testsuite name="" tests="2" assertions="6" errors="0" warnings="0" failures="0" skipped="0" time="0.111091">
+    <testsuite name="Aktaa Test Suite" tests="2" assertions="6" errors="0" warnings="0" failures="0" skipped="0" time="0.111091">
+      <testsuite name="SocialMedia\Poster\Tests\Unit\SocialMediaTest" file="/Users/mohammadaktaa/Desktop/Sites/push-to-social-package/tests/Unit/SocialMediaTest.php" tests="2" assertions="6" errors="0" warnings="0" failures="0" skipped="0" time="0.111091">
+        <testcase name="test_db_has_facebook_config" class="SocialMedia\Poster\Tests\Unit\SocialMediaTest" classname="SocialMedia.Poster.Tests.Unit.SocialMediaTest" file="/Users/mohammadaktaa/Desktop/Sites/push-to-social-package/tests/Unit/SocialMediaTest.php" line="19" assertions="4" time="0.102046"/>
+        <testcase name="test_it_can_post_to_facebook" class="SocialMedia\Poster\Tests\Unit\SocialMediaTest" classname="SocialMedia.Poster.Tests.Unit.SocialMediaTest" file="/Users/mohammadaktaa/Desktop/Sites/push-to-social-package/tests/Unit/SocialMediaTest.php" line="48" assertions="2" time="0.009045"/>
       </testsuite>
     </testsuite>
   </testsuite>

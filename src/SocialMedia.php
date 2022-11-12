@@ -2,6 +2,7 @@
 
 namespace SocialMedia\Poster;
 
+use Illuminate\Http\UploadedFile;
 use SocialMedia\Poster\Exceptions\MissingSocialMediaSettingsException;
 use SocialMedia\Poster\Jobs\FacebookPosterJob;
 use SocialMedia\Poster\Jobs\LinkedInPosterJob;
@@ -35,7 +36,7 @@ class SocialMedia extends SocialMediaAbstract
     {
         $settings = $this->socialMediaSettings->facebook;
         throw_if(!count($settings), new MissingSocialMediaSettingsException('Settings for {Facebook} provider is missing!'));
-        FacebookPosterJob::dispatch($settings, $this->content, $this->image, $this->link);
+        FacebookPosterJob::dispatch($settings, $this->content, $this->image, $this->link)->onQueue('social-poster-queue');
 
         return $this;
     }
