@@ -54,7 +54,7 @@ class SocialMediaTest extends TestCase
             ]
         ]);
 
-        $socialMedia = new SocialMedia([], 'test');
+        $socialMedia = new SocialMedia([], ['test facebook']);
         $socialMedia->toFacebook();
 
         Bus::assertDispatched(FacebookPosterJob::class);
