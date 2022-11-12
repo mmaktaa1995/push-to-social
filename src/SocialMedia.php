@@ -2,7 +2,6 @@
 
 namespace SocialMedia\Poster;
 
-use Illuminate\Http\UploadedFile;
 use SocialMedia\Poster\Exceptions\MissingSocialMediaSettingsException;
 use SocialMedia\Poster\Jobs\FacebookPosterJob;
 use SocialMedia\Poster\Jobs\LinkedInPosterJob;
