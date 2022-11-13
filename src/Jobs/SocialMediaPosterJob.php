@@ -27,13 +27,12 @@ abstract class SocialMediaPosterJob implements ShouldQueue
      */
     public $socialMediaSettings;
 
-    public function __construct(public $settings = [], public $content = [], public $image = null, public $link = null)
+    public function __construct(public $settings = [], public $content = '', public $image = null, public $link = null)
     {
         $this->socialMediaSettings = $settings;
-
         if ($this->link != null)
         {
-            $this->content[] = $this->link;
+            str($this->content)->append("\n{$this->link}");
         }
 
         if ($this->image == 'NO')
@@ -45,6 +44,5 @@ abstract class SocialMediaPosterJob implements ShouldQueue
             $this->image = config('social-media-poster.default_image');
         }
 
-        $this->content = implode("\n", $this->content);
     }
 }

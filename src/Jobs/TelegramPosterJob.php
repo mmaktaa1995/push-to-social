@@ -10,7 +10,7 @@ class TelegramPosterJob extends SocialMediaPosterJob
     public function handle()
     {
         Notification::route('telegram', 'nafezly')
-            ->notify(
+            ->notifyNow(
                 new TelegramNotification(
                     $this->content,
                     $this->image,

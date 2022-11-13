@@ -2,9 +2,8 @@
 
 namespace SocialMedia\Poster\Tests\Unit;
 
-use Illuminate\Support\Facades\Bus;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
-use SocialMedia\Poster\Jobs\FacebookPosterJob;
 use SocialMedia\Poster\Models\SocialMediaSetting;
 use SocialMedia\Poster\SocialMedia;
 use SocialMedia\Poster\Tests\TestCase;
@@ -14,51 +13,68 @@ class SocialMediaTest extends TestCase
     /**
      * @test
      */
-    public function test_db_has_facebook_config()
+    public function test_db_has_our_needed_config()
     {
-        $collection = collect();
-        $appId1 = Str::random();
-        $appId2 = Str::random();
-        $item1 = SocialMediaSetting::query()->create([
-            'facebook' => [
-                'app_id' => $appId1,
-            ],
-        ]);
+        $appId = null;
+        $this->createPlatformsRecord($appId);
 
-        $collection->push($item1);
-        $item2 = SocialMediaSetting::query()->create([
-            'facebook' => [
-                'app_id' => $appId2,
-            ],
-        ]);
+        $this->assertDatabaseHas('social_media_settings',
+            [
+                'facebook' => json_encode(['APP_ID' => $appId])
+            ]
+        );
 
-        $this->assertDatabaseHas('social_media_settings', ['facebook' => json_encode([
-            'app_id' => $appId1,
-        ])]);
+        $this->assertDatabaseHas('social_media_settings',
+            [
+                'twitter' => json_encode(['APP_ID' => $appId])
+            ]
+        );
 
-        $this->assertContains($item1, $collection);
-        $this->assertNotContains($item2, $collection);
-        $this->assertEquals($appId2, $item2->facebook['app_id']);
+        $this->assertDatabaseHas('social_media_settings',
+            [
+                'linkedin' => json_encode(['APP_ID' => $appId])
+            ]
+        );
+
     }
 
     /**
      * @test
      *
-     * @testdox Post to facebook
+     * @testdox Social media settings missing from database
      */
-    public function test_it_can_post_to_facebook()
+    public function test_user_can_not_publish_due_to_missing_config()
     {
+        $this->expectException(ModelNotFoundException::class);
         $this->busFake();
-        SocialMediaSetting::query()->create([
-            'facebook' => [
-                'app_id' => Str::random(),
-            ],
-        ]);
 
-        $socialMedia = new SocialMedia([], ['test facebook']);
-        $socialMedia->toFacebook();
-
-        Bus::assertDispatched(FacebookPosterJob::class);
-        $this->assertTrue(Str::contains('test facebook', $socialMedia->content));
+        $socialMedia = new SocialMedia('*', ['']);
+        $socialMedia->publish();
     }
+
+    /**
+     * @test
+     *
+     */
+    public function test_social_media_class_has_required_attributes()
+    {
+        $this->assertClassHasAttribute('platforms', SocialMedia::class);
+        $this->assertClassHasAttribute('socialMediaSettings', SocialMedia::class);
+        $this->assertClassHasAttribute('content', SocialMedia::class);
+    }
+
+    /**
+     * @test
+     *
+     */
+    public function test_social_media_class_has_required_methods()
+    {
+        $class = new \ReflectionClass(SocialMedia::class);
+
+        $this->assertTrue($class->hasMethod('toFacebook'));
+        $this->assertTrue($class->hasMethod('toLinkedin'));
+        $this->assertTrue($class->hasMethod('toTwitter'));
+        $this->assertTrue($class->hasMethod('toTelegram'));
+    }
+
 }

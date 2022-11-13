@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Str;
+use SocialMedia\Poster\Models\SocialMediaSetting;
 use SocialMedia\Poster\SocialMediaServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -62,9 +64,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 
@@ -101,6 +103,20 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function queueFake()
     {
         Queue::fake();
+        return $this;
+    }
+
+    protected function createPlatformsRecord(&$appId = null)
+    {
+        $appId = $appId ?? Str::random();
+        SocialMediaSetting::query()->create(
+            [
+                'facebook' => ['APP_ID' => $appId],
+                'twitter' => ['APP_ID' => $appId],
+                'linkedin' => ['APP_ID' => $appId],
+            ]
+        );
+
         return $this;
     }
 }

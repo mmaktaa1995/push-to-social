@@ -2,6 +2,7 @@
 
 namespace SocialMedia\Poster;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 
 abstract class SocialMediaAbstract
@@ -14,6 +15,9 @@ abstract class SocialMediaAbstract
     public function __construct(public $platforms = [], public $content = null, public $image = 'DEFAULT', public $link = null)
     {
         $this->socialMediaSettings = $this->getSocialMediaSettings();
+        if (!$this->socialMediaSettings){
+            throw new ModelNotFoundException("Social Media Settings is missing from your DB!");
+        }
     }
 
     public function __call(string $name, array $arguments)
@@ -43,4 +47,32 @@ abstract class SocialMediaAbstract
     abstract protected function getSocialMediaSettings();
 
     abstract public function publish();
+
+    public function setContent($content = '')
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function setImage($image = 'DEFAULT')
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function setLink($link = '')
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    public function setPlatforms($platforms = '*')
+    {
+        $this->platforms = $platforms;
+
+        return $this;
+    }
 }

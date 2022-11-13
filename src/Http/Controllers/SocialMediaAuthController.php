@@ -15,6 +15,11 @@ class SocialMediaAuthController
     {
         $this->middleware('IsAdmin');
     }*/
+
+    public function __invoke()
+    {
+        return view('social-media-poster::redirect');
+    }
     public $socialMediaSettings;
 
     /**

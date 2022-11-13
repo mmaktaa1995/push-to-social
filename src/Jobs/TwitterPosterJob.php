@@ -6,7 +6,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwitterPosterJob extends SocialMediaPosterJob
 {
-    public function __construct($settings = [], $content = [], $image = null, $link = null)
+    public function __construct($settings = [], $content = '', $image = null, $link = null)
     {
         $this->content = $content;
         $this->image = $image;
@@ -15,11 +15,11 @@ class TwitterPosterJob extends SocialMediaPosterJob
 
         if ($this->link != null)
         {
-            $this->content = mb_strimwidth(implode("\n", $this->content), 0, /*278 - strlen($this->link)*/ 257, '...') . "\n" . $this->link;
+            $this->content = mb_strimwidth($this->content, 0, /*278 - strlen($this->link)*/ 257, '...') . "\n" . $this->link;
         }
         else
         {
-            $this->content = mb_strimwidth(implode("\n", $this->content), 0, 278, '...');
+            $this->content = mb_strimwidth($this->content, 0, 278, '...');
         }
 
         if ($this->image == 'NO')

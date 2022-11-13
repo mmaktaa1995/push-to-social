@@ -9,9 +9,9 @@ class SocialMediaServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->registerPublishables();
-
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'social-media-poster');
+        $this->registerPublishables();
     }
 
     protected function registerPublishables(): void
@@ -20,16 +20,17 @@ class SocialMediaServiceProvider extends ServiceProvider
             __DIR__ . '/../config/social-media-poster.php' => config_path('social-media-poster.php'),
         ], 'config');
 
-//        if (!class_exists('CreateSocialMediaSettingsTable'))
-//        {
         $this->publishes([
             __DIR__ . '/../database/migrations/create_social_media_settings_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_media_settings_table.php'),
         ], 'migrations');
-//        }
 
         $this->publishes([
             __DIR__ . '/Http/Controllers/SocialMediaAuthController.php' => app_path('Http/Controllers/SocialMediaAuthController.php'),
         ], 'controller');
+
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/social-media-poster'),
+        ], 'views');
     }
 
     public function register()
