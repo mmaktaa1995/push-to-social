@@ -16,5 +16,5 @@ return [
 
     'binded-class' => '\App\Http\Controllers\SocialMediaAuthController',
 
-    'redirect-url' => '/'
+    'redirect-url' => '/',
 ];

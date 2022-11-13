@@ -21,19 +21,19 @@ class SocialMediaTest extends TestCase
         $appId2 = Str::random();
         $item1 = SocialMediaSetting::query()->create([
             'facebook' => [
-                'app_id' => $appId1
-            ]
+                'app_id' => $appId1,
+            ],
         ]);
 
         $collection->push($item1);
         $item2 = SocialMediaSetting::query()->create([
             'facebook' => [
-                'app_id' => $appId2
-            ]
+                'app_id' => $appId2,
+            ],
         ]);
 
         $this->assertDatabaseHas('social_media_settings', ['facebook' => json_encode([
-            'app_id' => $appId1
+            'app_id' => $appId1,
         ])]);
 
         $this->assertContains($item1, $collection);
@@ -51,8 +51,8 @@ class SocialMediaTest extends TestCase
         $this->busFake();
         SocialMediaSetting::query()->create([
             'facebook' => [
-                'app_id' => Str::random()
-            ]
+                'app_id' => Str::random(),
+            ],
         ]);
 
         $socialMedia = new SocialMedia([], ['test facebook']);
