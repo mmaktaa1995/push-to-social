@@ -43,6 +43,7 @@ class SocialMediaTest extends TestCase
 
     /**
      * @test
+     *
      * @testdox Post to facebook
      */
     public function test_it_can_post_to_facebook()
@@ -59,6 +60,5 @@ class SocialMediaTest extends TestCase
 
         Bus::assertDispatched(FacebookPosterJob::class);
         $this->assertTrue(Str::contains('test facebook', $socialMedia->content));
-
     }
 }
