@@ -31,31 +31,40 @@ class SocialMediaAuthController
         $APP_SECRET = $socialMediaSettingsFacebook['APP_SECRET'];
 
         $fb = new \Facebook\Facebook([
-            'app_id' => $APP_ID,
-            'app_secret' => $APP_SECRET,
+            'app_id'                => $APP_ID,
+            'app_secret'            => $APP_SECRET,
             'default_graph_version' => 'v2.10',
         ]);
 
         $helper = $fb->getRedirectLoginHelper();
 
-        try {
+        try
+        {
             $accessToken = $helper->getAccessToken();
-        } catch (FacebookResponseException $facebookResponseException) {
+        }
+        catch (FacebookResponseException $facebookResponseException)
+        {
             // When Graph returns an error
             throw $facebookResponseException;
-        } catch (FacebookSDKException $facebookSDKException) {
+        }
+        catch (FacebookSDKException $facebookSDKException)
+        {
             // When validation fails or other local issues
             throw $facebookSDKException;
         }
 
-        if (!isset($accessToken)) {
-            if ($helper->getError()) {
+        if (!isset($accessToken))
+        {
+            if ($helper->getError())
+            {
                 header('HTTP/1.0 401 Unauthorized');
                 echo 'Error: ' . $helper->getError() . "\n";
                 echo 'Error Code: ' . $helper->getErrorCode() . "\n";
                 echo 'Error Reason: ' . $helper->getErrorReason() . "\n";
                 echo 'Error Description: ' . $helper->getErrorDescription() . "\n";
-            } else {
+            }
+            else
+            {
                 header('HTTP/1.0 400 Bad Request');
                 echo 'Bad request';
             }
@@ -73,11 +82,15 @@ class SocialMediaAuthController
 
         $tokenMetadata->validateExpiration();
 
-        if (!$accessToken->isLongLived()) {
+        if (!$accessToken->isLongLived())
+        {
             // Exchanges a short-lived access token for a long-lived one
-            try {
+            try
+            {
                 $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-            } catch (FacebookSDKException $e) {
+            }
+            catch (FacebookSDKException $e)
+            {
                 throw $e;
             }
         }
@@ -122,6 +135,7 @@ class SocialMediaAuthController
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     *
      * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function authenticateFacebookApplication()
@@ -133,8 +147,8 @@ class SocialMediaAuthController
         $REDIRECT_URL = $socialMediaSettings->facebook['REDIRECT_URL'];
 
         $fb = new \Facebook\Facebook([
-            'app_id' => $APP_ID,
-            'app_secret' => $APP_SECRET,
+            'app_id'                => $APP_ID,
+            'app_secret'            => $APP_SECRET,
             'default_graph_version' => 'v2.10',
         ]);
         $helper = $fb->getRedirectLoginHelper();

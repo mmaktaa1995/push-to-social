@@ -20,7 +20,6 @@ class SocialMediaServiceProvider extends ServiceProvider
             __DIR__ . '/../config/social-media-poster.php' => config_path('social-media-poster.php'),
         ], 'config');
 
-
 //        if (!class_exists('CreateSocialMediaSettingsTable'))
 //        {
         $this->publishes([
@@ -29,7 +28,7 @@ class SocialMediaServiceProvider extends ServiceProvider
 //        }
 
         $this->publishes([
-            __DIR__ . '/Http/Controllers/SocialMediaAuthController.php' => app_path('Http/Controllers/SocialMediaAuthController.php')
+            __DIR__ . '/Http/Controllers/SocialMediaAuthController.php' => app_path('Http/Controllers/SocialMediaAuthController.php'),
         ], 'controller');
     }
 
@@ -39,7 +38,8 @@ class SocialMediaServiceProvider extends ServiceProvider
 
         $this->app->singleton(SocialMedia::class, function () {
             $platforms = config('social-media-poster.platforms');
-            if ($platforms == '*') {
+            if ($platforms == '*')
+            {
                 $platforms = $this->getAvailablePlatforms();
             }
 
