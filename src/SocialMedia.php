@@ -13,22 +13,29 @@ class SocialMedia extends SocialMediaAbstract
 {
     public function publish()
     {
-        if ($this->platforms == '*') {
+        if ($this->platforms == '*')
+        {
             $this->toFacebook()
                 ->toTwitter()
                 ->toLinkedin()
                 ->toTelegram();
-        } elseif (is_array($this->platforms)) {
-            if (in_array('facebook', $this->platforms)) {
+        }
+        elseif (is_array($this->platforms))
+        {
+            if (in_array('facebook', $this->platforms))
+            {
                 $this->toFacebook();
             }
-            if (in_array('twitter', $this->platforms)) {
+            if (in_array('twitter', $this->platforms))
+            {
                 $this->toTwitter();
             }
-            if (in_array('linkedin', $this->platforms)) {
+            if (in_array('linkedin', $this->platforms))
+            {
                 $this->toLinkedin();
             }
-            if (in_array('telegram', $this->platforms)) {
+            if (in_array('telegram', $this->platforms))
+            {
                 $this->toTelegram();
             }
         }

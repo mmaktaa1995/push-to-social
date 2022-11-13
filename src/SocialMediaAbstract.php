@@ -15,8 +15,9 @@ abstract class SocialMediaAbstract
     public function __construct(public $platforms = [], public $content = null, public $image = 'DEFAULT', public $link = null)
     {
         $this->socialMediaSettings = $this->getSocialMediaSettings();
-        if (!$this->socialMediaSettings){
-            throw new ModelNotFoundException("Social Media Settings is missing from your DB!");
+        if (!$this->socialMediaSettings)
+        {
+            throw new ModelNotFoundException('Social Media Settings is missing from your DB!');
         }
     }
 

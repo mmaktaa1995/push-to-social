@@ -20,6 +20,7 @@ class SocialMediaAuthController
     {
         return view('social-media-poster::redirect');
     }
+
     public $socialMediaSettings;
 
     /**

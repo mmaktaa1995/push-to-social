@@ -43,6 +43,5 @@ abstract class SocialMediaPosterJob implements ShouldQueue
         {
             $this->image = config('social-media-poster.default_image');
         }
-
     }
 }

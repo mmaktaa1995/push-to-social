@@ -3,8 +3,6 @@
 namespace SocialMedia\Poster\Tests\Unit;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Str;
-use SocialMedia\Poster\Models\SocialMediaSetting;
 use SocialMedia\Poster\SocialMedia;
 use SocialMedia\Poster\Tests\TestCase;
 
@@ -18,24 +16,26 @@ class SocialMediaTest extends TestCase
         $appId = null;
         $this->createPlatformsRecord($appId);
 
-        $this->assertDatabaseHas('social_media_settings',
+        $this->assertDatabaseHas(
+            'social_media_settings',
             [
-                'facebook' => json_encode(['APP_ID' => $appId])
+                'facebook' => json_encode(['APP_ID' => $appId]),
             ]
         );
 
-        $this->assertDatabaseHas('social_media_settings',
+        $this->assertDatabaseHas(
+            'social_media_settings',
             [
-                'twitter' => json_encode(['APP_ID' => $appId])
+                'twitter' => json_encode(['APP_ID' => $appId]),
             ]
         );
 
-        $this->assertDatabaseHas('social_media_settings',
+        $this->assertDatabaseHas(
+            'social_media_settings',
             [
-                'linkedin' => json_encode(['APP_ID' => $appId])
+                'linkedin' => json_encode(['APP_ID' => $appId]),
             ]
         );
-
     }
 
     /**
@@ -54,7 +54,6 @@ class SocialMediaTest extends TestCase
 
     /**
      * @test
-     *
      */
     public function test_social_media_class_has_required_attributes()
     {
@@ -65,7 +64,6 @@ class SocialMediaTest extends TestCase
 
     /**
      * @test
-     *
      */
     public function test_social_media_class_has_required_methods()
     {
@@ -76,5 +74,4 @@ class SocialMediaTest extends TestCase
         $this->assertTrue($class->hasMethod('toTwitter'));
         $this->assertTrue($class->hasMethod('toTelegram'));
     }
-
 }

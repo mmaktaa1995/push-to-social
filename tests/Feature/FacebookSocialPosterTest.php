@@ -2,8 +2,6 @@
 
 namespace SocialMedia\Poster\Tests\Feature;
 
-
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 use SocialMedia\Poster\Exceptions\MissingSocialMediaSettingsException;

@@ -64,9 +64,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
     }
 
@@ -112,7 +112,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         SocialMediaSetting::query()->create(
             [
                 'facebook' => ['APP_ID' => $appId],
-                'twitter' => ['APP_ID' => $appId],
+                'twitter'  => ['APP_ID' => $appId],
                 'linkedin' => ['APP_ID' => $appId],
             ]
         );
