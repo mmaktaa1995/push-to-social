@@ -63,6 +63,12 @@ Optionally, you can publish the views using
 php artisan vendor:publish --tag="social-media-poster-views"
 ```
 
+And if you want to customize controller functions we provided command to publish it to your `app` folder
+
+```bash
+php artisan social-media-poster:publish-controller
+```
+
 # Usage
 ```php
 // Use case 1
