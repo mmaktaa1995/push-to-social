@@ -41,7 +41,8 @@ class SocialMediaServiceProvider extends ServiceProvider
 
         $this->app->singleton(SocialMedia::class, function () {
             $platforms = config('social-media-poster.platforms');
-            if ($platforms == '*') {
+            if ($platforms == '*')
+            {
                 $platforms = $this->getAvailablePlatforms();
             }
 
@@ -58,5 +59,4 @@ class SocialMediaServiceProvider extends ServiceProvider
     {
         return config('social-media-poster.available-platforms');
     }
-
 }
