@@ -5,7 +5,6 @@
 
 <p align="center"><img src="/art/social-media-poster-new.png" alt="Social Media Poster"></p>
 
-
 # Push To Social [ Facebook , Twitter , Telegram , Linkedin ]
 <!--/delete-->
 
