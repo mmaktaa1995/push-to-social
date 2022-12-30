@@ -14,7 +14,8 @@ class SocialMediaServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'social-media-poster');
         $this->registerPublishables();
 
-        if (!File::exists(base_path('app/Http/Controllers/SocialMediaAuthController.php'))) {
+        if (!File::exists(base_path('app/Http/Controllers/SocialMediaAuthController.php')))
+        {
             $controllerStub = $this->replaceNameSpace(File::get(__DIR__ . '/../stubs/SocialMediaAuthController.stub'));
             File::put(base_path('app/Http/Controllers/SocialMediaAuthController.php'), $controllerStub);
         }
