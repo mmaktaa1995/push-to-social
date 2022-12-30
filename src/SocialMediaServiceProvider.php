@@ -2,8 +2,8 @@
 
 namespace SocialMedia\Poster;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use SocialMedia\Poster\Commands\PublishControllerCommand;
 use SocialMedia\Poster\Http\Controllers\SocialMediaAuthController;
 
 class SocialMediaServiceProvider extends ServiceProvider
@@ -13,11 +13,7 @@ class SocialMediaServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'social-media-poster');
         $this->registerPublishables();
-
-        if (!File::exists(base_path('app/Http/Controllers/SocialMediaAuthController.php'))) {
-            $controllerStub = $this->replaceNameSpace(File::get(__DIR__ . '/../stubs/SocialMediaAuthController.stub'));
-            File::put(base_path('app/Http/Controllers/SocialMediaAuthController.php'), $controllerStub);
-        }
+        $this->commands([PublishControllerCommand::class]);
     }
 
     protected function registerPublishables(): void
@@ -45,8 +41,7 @@ class SocialMediaServiceProvider extends ServiceProvider
 
         $this->app->singleton(SocialMedia::class, function () {
             $platforms = config('social-media-poster.platforms');
-            if ($platforms == '*')
-            {
+            if ($platforms == '*') {
                 $platforms = $this->getAvailablePlatforms();
             }
 
@@ -64,8 +59,4 @@ class SocialMediaServiceProvider extends ServiceProvider
         return config('social-media-poster.available-platforms');
     }
 
-    private function replaceNameSpace($file)
-    {
-        return str_replace('{{namespace}}', 'App\Http\Controllers', $file);
-    }
 }
