@@ -1,6 +1,6 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mmaktaa1995/social-media-poster.svg?style=flat-square)](https://packagist.org/packages/mmaktaa1995/social-media-poster)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/mmaktaa1995/social-media-poster/run-tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/mmaktaa1995/social-media-poster/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/mmaktaa1995/social-media-poster/fix-php-code-style-issues.yml?branch=master&label=code%20style&style=flat-square)](https://github.com/mmaktaa1995/social-media-poster/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/mmaktaa1995/social-media-poster/php-cs-fixer.yml?branch=master&label=code%20style&style=flat-square)](https://github.com/mmaktaa1995/social-media-poster/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/mmaktaa1995/social-media-poster.svg?style=flat-square)](https://packagist.org/packages/mmaktaa1995/social-media-poster)
 
 <p align="center"><img src="/art/social-media-poster-new.png" alt="Social Media Poster"></p>
