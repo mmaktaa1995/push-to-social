@@ -1,56 +1,97 @@
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/mmaktaa1995/social-media-poster.svg?style=flat-square)](https://packagist.org/packages/mmaktaa1995/social-media-poster)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/mmaktaa1995/social-media-poster/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/mmaktaa1995/social-media-poster/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/mmaktaa1995/social-media-poster/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/mmaktaa1995/social-media-poster/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/mmaktaa1995/social-media-poster.svg?style=flat-square)](https://packagist.org/packages/mmaktaa1995/social-media-poster)
+
 <p align="center"><img src="/art/social-media-poster-new.png" alt="Social Media Poster"></p>
 
 
 # Push To Social [ Facebook , Twitter , Telegram , Linkedin ]
+<!--/delete-->
 
-via this package you can push notifications to [ Facebook , Twitter , Telegram , Linkedin ] 
+Via this package you can push notifications to [ Facebook , Twitter , Telegram , Linkedin ] with a few params 
 - content 
-- image ( Optional )
-- link ( Optional )
+- image (optional)
+- link (optional)
+- 
+<!--/delete-->
 
-```php
-(new SocialHelper($platforms=[],$content=[],$image='',$link=''))->push()
+## Installation
+
+You can install the package via composer:
+
+```bash
+composer require mmaktaa1995/social-media-poster
 ```
-## How To Push
+
+You can publish and run the migrations with:
+
+```bash
+php artisan vendor:publish --tag=":social-media-poster-migrations"
+php artisan migrate
+```
+
+You can publish the config file with:
+
+```bash
+php artisan vendor:publish --tag="social-media-poster-config"
+```
+
+This is the contents of the published config file:
 
 ```php
+return [
+  'platforms' => '*',
+
+    'available-platforms' => [
+        'facebook',
+        'twitter',
+        'telegram',
+        'linkedin',
+    ],
+
+    'default_image' => 'https://nafezly.com/site_images/title.png?v=1',
+
+    'binded-class' => '\App\Http\Controllers\SocialMediaAuthController',
+
+    'redirect-url' => '/authentication-successfully',
+];
+```
+
+Optionally, you can publish the views using
+
+```bash
+php artisan vendor:publish --tag="social-media-poster-views"
+```
+
+# Usage
+```php
+// Use case 1
+$socialMedia = new SocialMedia(['facebook', 'twitter']);
+$socialMedia
+    ->setContent('')
+    ->setImage('')
+    ->setLink('');
+
+// Use case 2
+$socialMedia = new SocialMedia();
+
+$socialMedia->toFacebook()
+    ->toLinkedin()
+    ->toTelegram();
+
+// Use case 3
+$socialMedia->facebook()
+    ->linkedin()
+    ->telegram();
+
 ( new SocialHelper(
     ['facebook','twitter','telegram','linkedin'],
-    ['Hello', 'Iam here','Message From Push to social'],
+    "Hello I'm here, This Message From Push to social",
     'https://nafezly.com/site_images/title.png',
     'https://nafezly.com/'
-) )->push();
+))->publish();
 ```
-
-# You have to install
-
-```console
-composer require abraham/twitteroauth
-composer require facebook/graph-sdk
-composer require laravel-notification-channels/telegram
-```
-
-# Migrations for laravel
-
-```php
-Schema::create('social_media_settings', function (Blueprint $table) {
-    $table->bigIncrements('id');
-    $table->json('facebook')->nullable();
-    $table->json('twitter')->nullable();
-    $table->json('telegram')->nullable();
-    $table->json('linkedin')->nullable();
-    $table->json('whatsapp')->nullable();
-    $table->json('google')->nullable();
-
-    $table->timestamps();
-});
-```
-- Create Jobs folder inside app folder
-- Move all Jobs in the repo to Jobs Folder
-- Create Notifications Folder inside app folder For telegram
-- Move TeleNotification To Notifications folder
-- Move Routes , Models and Controllers To Your Project
-
 
 # Authorize Facebook And Linkedin 
 
@@ -101,3 +142,22 @@ Schema::create('social_media_settings', function (Blueprint $table) {
    "TELEGRAM_BOT_TOKEN":""
 }
 ```
+
+## Testing
+
+```bash
+composer test
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Credits
+
+- [:author_name](https://github.com/:author_username)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
