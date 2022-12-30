@@ -17,20 +17,23 @@ class PublishControllerCommand extends Command
 
     public function handle()
     {
-        if (!$this->confirmToProceed()) {
+        if (!$this->confirmToProceed())
+        {
             return 1;
         }
 
-        if (!is_dir($stubsPath = $this->laravel->basePath('app/Http/Controllers'))) {
+        if (!is_dir($stubsPath = $this->laravel->basePath('app/Http/Controllers')))
+        {
             (new Filesystem())->makeDirectory($stubsPath);
         }
 
-        if (!File::exists(base_path('app/Http/Controllers/SocialMediaAuthController.php'))) {
+        if (!File::exists(base_path('app/Http/Controllers/SocialMediaAuthController.php')))
+        {
             $controllerStub = $this->replaceNameSpace(File::get(__DIR__ . '/../../stubs/SocialMediaAuthController.stub'));
             File::put(base_path('app/Http/Controllers/SocialMediaAuthController.php'), $controllerStub);
         }
 
-        $this->info("SocialMediaAuthController stub published.");
+        $this->info('SocialMediaAuthController stub published.');
     }
 
     private function replaceNameSpace($file)
